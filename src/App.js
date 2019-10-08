@@ -5,24 +5,22 @@ import { async } from "q";
 
 function App() {
 
+  //This use effect functions runs every time the page loads
   // useEffect( () => {
   //   activateCipher();
   // }, []);
 
+  // Variables and states being set
   const vigenerURL = 'http://localhost:8080/api/cipher/encrypt';
-
-  // const Key = 'test';
-  // const rawtext = 'she sells sea shells';
-  // const encrypt = true;
-
   const [rawtext, setRawText] = useState('');
   const [Key, setKey] = useState('');
   const [encrypt, setEncrypt] = useState(true);
-  const [message, setMessage] = useState('meat loaf');
+  const [message, setMessage] = useState('Cipher Result');
 
+
+  // Get text from input 
   const getRawText = e => {
     setRawText(e.target.value);
-    console.log(rawtext)
   }
 
   const getKey = e => {
@@ -33,11 +31,11 @@ function App() {
     setEncrypt(e.target.value);
   }
 
+  // Call backend API
   const activateCipher = async () => {
 
     const response = await axios.post(vigenerURL,{'key': Key, 'rawtext': rawtext, 'encrypt': encrypt}, { headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}})
     .then(function (response) {
-      console.log(response)
       setMessage(response.data.text);
     })
     .catch(function (error) {
@@ -45,9 +43,9 @@ function App() {
     });
 
     const responseData = response;
-    console.log(responseData);
   }
 
+  // Set all final values and send them in post request
   const callVigenerApi = e => {
     e.preventDefault();
     setEncrypt(encrypt);
