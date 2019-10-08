@@ -37,6 +37,7 @@ function App() {
       { Key: Key, rawtext: rawtext, encrypt: encrypt},{ headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } })
     .then(response => {
       console.log(response)
+      setMessage(response.data.text);
     })
     .catch(error => {
       console.log(error);
@@ -57,16 +58,15 @@ function App() {
 
   return(
 
-    <div>
-      <h1 className="">Hello Vigener Cipher</h1>
-      <div className="">
-        <form onSubmit={callVigenerApi}>
-          <label> Enter Text Here: </label>
+    <div className="container">
+      <h1 className="Viginer-Header">Omri's Vigener Cipher</h1>
+      <div className="form-container">
+        <form className="Viginer-Form" onSubmit={callVigenerApi}>
           <div>
-            <input type="text" name="text" value={rawtext} onChange = {getRawText}/>
+            <input type="text" name="text" placeholder="Enter Text Here" value={rawtext} onChange = {getRawText}/>
           </div>
           <div>
-            <input type="text" name="key" value={Key} onChange = {getKey}/>
+            <input type="text" name="key" placeholder="Enter Key" value={Key} onChange = {getKey}/>
           </div>
           <div>
             <select value={encrypt} onChange = {getEncrypt}>
@@ -76,8 +76,8 @@ function App() {
           </div>
           <div> <input type="submit" value="Submit" /> </div>
         </form>
-        <h1 className=""> Your text has been processed and here is your result: {message}</h1>
       </div>
+      <h1 className="results"> Your text has been processed and here is your result: {message}</h1>
     </div>
   );
 }
