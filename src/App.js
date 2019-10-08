@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from 'axios';
+import { async } from "q";
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
 
   const [rawtext, setRawText] = useState('');
   const [Key, setKey] = useState('');
-  const [encrypt, setEncrypt] = useState(false);
+  const [encrypt, setEncrypt] = useState(true);
   const [message, setMessage] = useState('meat loaf');
 
   const getRawText = e => {
@@ -33,13 +34,13 @@ function App() {
   }
 
   const activateCipher = async () => {
-    const response = await axios.post(vigenerURL, 
-      { Key: Key, rawtext: rawtext, encrypt: encrypt},{ headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } })
-    .then(response => {
+
+    const response = await axios.post(vigenerURL,{'key': Key, 'rawtext': rawtext, 'encrypt': encrypt}, { headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}})
+    .then(function (response) {
       console.log(response)
       setMessage(response.data.text);
     })
-    .catch(error => {
+    .catch(function (error) {
       console.log(error);
     });
 
@@ -63,15 +64,15 @@ function App() {
       <div className="form-container">
         <form className="Viginer-Form" onSubmit={callVigenerApi}>
           <div>
-            <input type="text" name="text" placeholder="Enter Text Here" value={rawtext} onChange = {getRawText}/>
+            <input type="text" name="text" placeholder="Enter Text Here" required value={rawtext} onChange = {getRawText}/>
           </div>
           <div>
-            <input type="text" name="key" placeholder="Enter Key" value={Key} onChange = {getKey}/>
+            <input type="text" name="key" placeholder="Enter Key" required value={Key} onChange = {getKey}/>
           </div>
           <div>
             <select value={encrypt} onChange = {getEncrypt}>
-              <option value={false}>Encrypt Text</option>
-              <option value={true}>Decrypt Text</option>
+              <option value={true}>Encrypt Text</option>
+              <option value={false}>Decrypt Text</option>
             </select>
           </div>
           <div> <input type="submit" value="Submit" /> </div>
