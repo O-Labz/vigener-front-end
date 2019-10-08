@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import axios from 'axios';
 
 
@@ -14,13 +14,23 @@ function App() {
   // const rawtext = 'she sells sea shells';
   // const encrypt = true;
 
-
-  const [value, setValue] = useState('');
   const [rawtext, setRawText] = useState('');
   const [Key, setKey] = useState('');
-  const [encrypt, setEncrypt] = useState('');
-  const [message, setMessage] = useState('');
+  const [encrypt, setEncrypt] = useState(false);
+  const [message, setMessage] = useState('meat loaf');
 
+  const getRawText = e => {
+    setRawText(e.target.value);
+    console.log(rawtext)
+  }
+
+  const getKey = e => {
+    setKey(e.target.value);
+  }
+
+  const getEncrypt = e => {
+    setEncrypt(e.target.value);
+  }
 
   const activateCipher = async () => {
     const response = await axios.post(vigenerURL, 
@@ -36,17 +46,12 @@ function App() {
     console.log(responseData);
   }
 
-
-  const getRawText = e => {
-    setRawText(e.target.value);
-  }
-
-  const getKey = e => {
-    setKey(e.target.value);
-  }
-
-  const getEncrypt = e => {
-    setEncrypt(e.target.value);
+  const callVigenerApi = e => {
+    e.preventDefault();
+    setEncrypt(encrypt);
+    setRawText(rawtext);
+    setKey(Key);
+    activateCipher();
   }
 
 
@@ -55,23 +60,23 @@ function App() {
     <div>
       <h1 className="">Hello Vigener Cipher</h1>
       <div className="">
-        <form>
+        <form onSubmit={callVigenerApi}>
           <label> Enter Text Here: </label>
           <div>
             <input type="text" name="text" value={rawtext} onChange = {getRawText}/>
           </div>
           <div>
-            <input type="text" name="key" value={getKey}/>
+            <input type="text" name="key" value={Key} onChange = {getKey}/>
           </div>
           <div>
-            <select onChange = {getEncrypt}>
-              <option value="true">Encrypt Text</option>
-              <option value="false">Decrypt Text</option>
+            <select value={encrypt} onChange = {getEncrypt}>
+              <option value={false}>Encrypt Text</option>
+              <option value={true}>Decrypt Text</option>
             </select>
           </div>
           <div> <input type="submit" value="Submit" /> </div>
         </form>
-        <h1 className=""> Your text has been processed and here is your result: {}</h1>
+        <h1 className=""> Your text has been processed and here is your result: {message}</h1>
       </div>
     </div>
   );
